@@ -12,8 +12,12 @@ const io = new Server(server, {
 
 const PORT = process.env.PORT || 3000;
 
-// Statik dosyaları sun
-app.use(express.static(path.join(__dirname, 'public')));
+// Statik dosyaları sun (public/ varsa oradan, yoksa kök dizinden)
+const fs = require('fs');
+const staticPath = fs.existsSync(path.join(__dirname, 'public'))
+  ? path.join(__dirname, 'public')
+  : __dirname;
+app.use(express.static(staticPath));
 
 // Aktif kullanıcılar: socketId -> { nick, color }
 const users = new Map();
